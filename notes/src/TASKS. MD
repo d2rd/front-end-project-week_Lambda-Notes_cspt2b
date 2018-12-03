@@ -1,0 +1,46 @@
+# REFACTOR  to remove 'Summary' field because it is created on the fly in 'Notes.js'
+
+# CREATE summary
+*   makeNoteSummary4 = note => {
+    return note.summary = this.props.body.substring(0, 50);
+    console.log(note.summary);
+    }
+* 
+    {/* let noteSummary = ''; */}
+    <div className="Note-summary"  key={note.id}>
+    let noteSummary = () => {this.makeSummary4(note)}
+        {note.summary}
+    </div>  // shows note contents on click
+
+
+# TRUNCATE STRING  https://stackoverflow.com/questions/5454235/shorten-string-without-cutting-words-in-javascript
+
+    Lodash has a function specifically written for this: _.truncate
+
+        const truncate = _.truncate
+        const str = 'The quick brown fox jumps over the lazy dog'
+
+        truncate(str, {
+        length: 30, // maximum 30 characters
+        separator: /,?\.* +/ // separate by spaces, including preceding commas and periods
+        })
+
+        // 'The quick brown fox jumps...'
+
+# Hiding the summary block element
+* https://eddyerburgh.me/toggle-visibility-with-react
+* https://stackoverflow.com/questions/41819342/how-to-hide-and-show-a-div-in-react
+* https://stackoverflow.com/questions/41247496/jsx-if-else-shorthand-to-hide-element
+
+# import redux-form from 'redux-form;
+# import promise from 'redux-promise';
+Import {Router, browserHistory} from 'react-router';  // navigation
+Building a Simple CRUD App with React + Redux 
+  p24 index.js
+        import { Router, browserHistory } from 'react-router';
+        import routes from './routes'
+
+        render (
+            <router history={browserHistory} routes =(routes) />,
+            document.getElementById('App')
+        );

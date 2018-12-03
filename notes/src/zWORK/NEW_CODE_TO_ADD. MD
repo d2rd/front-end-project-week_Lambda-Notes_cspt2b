@@ -1,0 +1,27 @@
+STEPS
+1. Create Store
+2. Link Store to Provider
+3. Connect Component
+4. Build out app
+
+
+
+# import redux-form from 'redux-form;
+# import promise from 'redux-promise';
+Import {Router, browserHistory} from 'react-router';  // navigation
+
+
+Use React-Router to show notesList or createNewNote
+  Hint: use the navPanel to be a sibling of the other routes
+
+<BrowserRouter>  // 'required react-router'
+        <div className="PanelContainer"> // container for both panels
+          <navPanel /> // nav
+          <div className="Content__container"> //
+            <Route exact path="/" render={this.Content} /> // list view
+            <Route path="/note/:id" render={this.Note} /> // individual notes
+            <Route path="/create/" render={this.Create} /> // add notes
+            <Route path="/edit/:id/" render={this.Edit} /> // edit notes
+          </div>
+        </div>
+      </BrowserRouter>
