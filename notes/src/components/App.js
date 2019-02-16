@@ -4,11 +4,12 @@ import './App.css';
 import Notes from './Notes';
 import NoteForm from './NoteForm';
 import { getNotes } from '../actions';
+// import { createNote } from '../actions'; // added Dec 8
 import { connect } from 'react-redux';
 
 class App extends Component {
   componentDidMount() {
-    this.props.getNotes();
+    this.props.getNotes();``
   }
   render() {
     return (

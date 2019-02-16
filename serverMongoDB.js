@@ -1,10 +1,9 @@
 const express = require('express');
-const cors = require('cors');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
-const server = express();
-
+const cors = require('cors');
 const port = 5500;
+const server = express();
 const ElectricUpright = require('./models/ElectricUpright')
 // const SpeakerCabinets = require('./models/SpeakerCabinets')
 // const Misc = require('./models/Misc')
@@ -26,14 +25,8 @@ mongoose.connect('mongodb://ds141611.mlab.com:41611/d2rd-notes', options)
 // ☞ 8cf866c9-a061-48df-a275-ebdbf2196f60
 // REFACTORED TO MOVE NOTES TO MONGODB
 
-// SET NOTES DB
-// setting 'notes' store to connect to mongoDB
-  let notes = mongoose.connect('mongodb://ds141611.mlab.com:41611/d2rd-notes', options);
-  // let notes = d2rdNotes;
-// let id = notes.length;
-
-// MIDDLEWARE
 server.use(express.json()) // bodyParser function for json payloads
+
 server.use(helmet())
 server.use(cors()); // ie between netlify, heroku and mlab
 
