@@ -1,5 +1,7 @@
+// ☞ aa187bf9-7c80-4deb-a3ce-6d4ed5e3a37a
 const express = require('express');
 const cors = require('cors');
+const corsOptions = {origin: 'http://localhost:3000'}
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const server = express();
@@ -63,7 +65,7 @@ server.post('/ElectricUprights/create', (req, res) => {
     .catch(err => console.log(err))
 });
 // METHOD 1 req.body
-// server.put('/ElectricUprights/update/', (req, res) => {
+// app.put('/ElectricUprights/update/', (req, res) => {
 //   console.log(req.body)
 //   ElectricUpright.findByIdAndUpdate(req.body._id, {price: req.body.price, itemURL: req.body.itemURL})
 //     .then(note => {
@@ -95,7 +97,7 @@ function deleteFunc (req, res) {
 };
 
 // ADDING MIDDLEWARE
-// server.delete('/ElectricUprights/update/:id', authorizeUserMiddleware, deleteFunc)
+// app.delete('/ElectricUprights/update/:id', authorizeUserMiddleware, deleteFunc)
 
 // function deleteFunc (req, res) {
 //   console.log(req.params.id);
@@ -107,7 +109,7 @@ function deleteFunc (req, res) {
 //     .catch(err => console.log(err));
 // };
 
-// server.delete('/ElectricUprights/update/:id', (req, res) => {
+// app.delete('/ElectricUprights/update/:id', (req, res) => {
 //   console.log(req.params.id)
 //   ElectricUpright.findByIdAndRemove(req.params.id);
 //   const newNotes = d2rdNotes.filter(note => {
@@ -117,7 +119,7 @@ function deleteFunc (req, res) {
 //   res.send(d2rdNotes);
 // });
 // **** OTHER COLLECTIONS ***
-// server.get('/SpeakerCabinets', (req, res) => {
+// app.get('/SpeakerCabinets', (req, res) => {
 //   SpeakerCabinets.find()
 //     .then((data) => {
 //       res.json(data)
@@ -125,7 +127,7 @@ function deleteFunc (req, res) {
 //     .catch(err => console.log(err.message))
 // })
 
-// server.get('/misc', (req, res) => {
+// app.get('/misc', (req, res) => {
 //   misc.find()
 //     .then((data) => {
 //       res.json(data)

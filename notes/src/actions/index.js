@@ -13,8 +13,8 @@ export const SINGLE_NOTE = 'SINGLE_NOTE';
 export const TOGGLE_UPDATE_NOTE = 'TOGGLE_UPDATE_NOTE';
 export const UPDATE_TARGET = 'UPDATE_TARGET';
 
-const URL = 'http://localhost:5500/api/notes';
-
+// const URL = 'http://localhost:5500/api/notes';
+const URL = 'mongodb://ds141611.mlab.com:41611/d2rd-notes';
 // GET
 export const getNotes = () => {
   const notes = axios.get(`${URL}/get`);
