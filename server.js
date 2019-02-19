@@ -1,150 +1,103 @@
-// ☞ aa187bf9-7c80-4deb-a3ce-6d4ed5e3a37a
 const express = require('express');
 const cors = require('cors');
-const corsOptions = {origin: 'http://localhost:3000'} // Tried replacing url with `*` no difference
-const helmet = require('helmet');
-const mongoose = require('mongoose');
-const server = express();
+
+const bodyParser = require('body-parser');
+const app = express();
 
 const port = 5500;
-const ElectricUpright = require('./models/ElectricUpright');
-const SpeakerCabinets = require('./models/SpeakerCabinets');
-const Misc = require('./models/Misc');
-const NoteItem = require('./models/NoteItem');
 
-// connect to database
-const options = {
-  user:"d2rd",
-  pass:"d2rd-PW",
-  useNewUrlParser: true // use the urlParser instead of the old one
-}
-// ☞ bd397750-457f-4308-b616-f0424ddc5d04
+// REFACTOR  to remove 'Summary' field because it is created on the fly in 'Notes.js'
+let notes = [
+  {
+    id: 0,
+    title: "Auto service",
+    priority: 2,
+    summary: "",  // ADD logic to copy first 146 characters to summary.  If content is > 146 characters copy to body.
+    body: "Check prices for Service G at Autobahn motors, Mercedes-Benz Marin, MB Pleasanton",
+    urlAddress: ``
+  },
+  {
+    id: 1,
+    title: "Trickfish 4x8 bass Cabinet",
+    priority: 3,
+    summary:"",
+    body: "The TF408 features impressive specifications making it a great stand-alone cabinet and an absolute game changer as a two-cabinet stack. Weight-saving measures were taken into account while not losing the main objective of a killer compact cabinet that would be at home on stages of all sizes.  |  Custom Eminence 4 x 8” ferrite speakers | HF compression driver on 80° conical horn  | 1200 watts peak handling, 600 watts RMS  |  Custom crossover with peak protection and HF Attenuation  |  2 x NL3 Combo connectors, 2 x ¼” phone jacks  | Baltic Birch  | Dado and Rabbet Joint Construction  | 8 ohms  | Freq. Resp. 40Hz - 16kHz  |  Metal handles, metal corners, rubber feet  | 16 gauge steel grille  | 22 oz. sharkskin vinyl  | H 22.0 x W 19.0 x D 15.0  | Weight: Net 56Lbs  | Made in the USA",
+    urlAddress: `https://www.trickfishamps.com/tf408`
+  },
+  {
+    id: 2,
+    title: "New portable upright bass?",
+    priority: 1,
+    summary: "Eminence Bass: Finally, the Eminence Bass is the closest relative to a true upright bass to our hands and ears. It was the first EUB that really caught Bob's attention...",
+    body: "Finally, the Eminence Bass is the closest relative to a true upright bass to our hands and ears. It was the first EUB that really caught Bob's attention, that he wanted to continue to play and enjoy -- it has the vibe, both literally and figuratively-- the vibrations of a truly acoustic instrument against the body, and the feel of a true double bass neck. It is constructed like a full size double bass, with a bass bar and sound post. It has a nicely crafted removable wooden bout to put the bass in the perfect playing position. And while the acoustic sound is not loud enough, unamplified, to perform with, it can be practiced without an amp, as the acoustic sound is quite pleasing but won't be transmitted throughout the house.",
+    urlAddress: `https://www.gollihurmusic.com/product/3080-ELECTRIC_UPRIGHT_BASSES_WHICH_ONE_A_BUYER_S_GUIDE.html`
 
-mongoose.connect('mongodb://ds141611.mlab.com:41611/d2rd-notes', options)
-.then(() => console.log('Success connecting the MongoDB/d2rd-notes on mlab'))
-.catch((err) => console.log(err.message)) // TEST: changing PW should throw 'authentication failed error
-
-// create schema
-// ☞ 8cf866c9-a061-48df-a275-ebdbf2196f60
-// REFACTORED TO MOVE NOTES TO MONGODB
-
-// SET NOTES DB
-// setting 'notes' store to connect to mongoDB
-  let notes = mongoose.connect('mongodb://ds141611.mlab.com:41611/d2rd-notes', options);
-  // let notes = d2rdNotes;
-// let id = notes.length;
-
-// MIDDLEWARE
-server.use( express.json(), cors()) // bodyParser function for json payloads
-server.use(helmet())
- // Allow Cross-origin Resource Sharing i.e. between netlify, heroku and mlab
-// server.use(cors());
-server.use((req, res, next) =>{
-  res.header("Access-Control-Allow-Origin", "*");  //`*` allows all sites to make requests.  change to specific domains to restrict access.
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH,DELETE, GET')
-    return res.status(200).json({})
+  },
+  {
+    id: 3,
+    title: "Try out the Ned Steinberg EUB models",
+    priority: 3,
+    summary: "A wonderfully smooth playing and sounding EUB (electric upright bass). Ned Steinberger is the master of ergonomics, as well as tonal flexibility. This NS CR4M model adds EMG magnetic pickups...",
+    body: "A wonderfully smooth playing and sounding EUB (electric upright bass). Ned Steinberger is the master of ergonomics, as well as tonal flexibility. This NS CR4M model adds EMG magnetic pickups, for even more flexibility of tone beyond the Polar bridge pickups. A 3 position switch lets you choose the output of the two types of pickups, and you can also adjust each string's coil of the neodymium magnets for as punch as you desire, and to balance the output for your best tone. List Price: $3580 (Includes great heavy duty braced tripod stand and improved gig bag with pocket for the stand)",
+    urlAddress: ``
+  },
+  {
+    id: 4,
+    title: "New Storage Spaces",
+    priority: 2,
+    summary:"",
+    body: "Chapman Storage, Concord.  |  Clutter.com ",
+    urlAddress: ``
+  },
+  {
+    id: 5,
+    title: "Errors Test - bad note ",
+    priority: 2,
+    summary:"Test: summary with empty body",
+    body: "",
+    urlAddress: ``
   }
-  next();  // allows other routes to take over.
-})
+];
 
-// const memCache ={}; 
+let id = notes.length;
 
-//add CRUD routes
-server.get('/', (req, res) => {
-  res.send('Hello from the express server'); // sanity check
+app.use(bodyParser.json());
+
+app.use(cors());
+
+const memCache ={};  //add logic for app.get
+
+app.get('/api/notes/get', (req, res) => {
+  res.send(notes);
 });
 
-server.get('/ElectricUprights', (req, res) => {
-  ElectricUpright.find()
-    .then((data) => {
-      res.json(data)
-    })
-    .catch(err => console.log(err.message))
-})
-
-server.post('/ElectricUprights/create', (req, res) => {
-  const { title, priority, body, price, itemURL, reviewURL } = req.body;
-  const myNote = { title, priority, body, price, itemURL, reviewURL };
-  const newNote = new ElectricUpright(myNote)
-  newNote.save()
-    .then(note => {
-      res.status(201).json(note)
-    })
-    .catch(err => console.log(err))
+app.post('/api/notes/create', (req, res) => {
+  ++id;
+  const { title, summary, body, priority } = req.body;
+  const myNote = { id, title, summary, body, priority };
+  notes.push(myNote);
+  res.send(notes);
 });
-// METHOD 1 req.body
-// app.put('/ElectricUprights/update/', (req, res) => {
-//   console.log(req.body)
-//   ElectricUpright.findByIdAndUpdate(req.body._id, {price: req.body.price, itemURL: req.body.itemURL})
-//     .then(note => {
-//       res.status(201).json(note)
-//     })
-//     .catch(err => console.log(err))
-// })
-// METHOD 2 req.params
-server.put('/ElectricUprights/update/:id', (req, res) => {
-  console.log(req.params.id)
-  ElectricUpright
-    .findByIdAndUpdate(req.params.id, {price: req.body.price, itemURL: req.body.itemURL})
-    .then(note => {
-      res.status(201).json(note)
-    })
-    .catch(err => console.log(err))
-})
 
-server.delete('/ElectricUprights/delete/:id', deleteFunc)
+app.put('/api/notes/update/:id', (req, res) => {
+  const { title, priority,summary, body } = req.body;
+  const updatedNote = { title, priority, summary, body };
+  const newNotes = notes.map(note => {
+    return (note.id == req.params.id ? updatedNote :note);
+  });
+  notes = newNotes;
+  res.send(notes);
+});
 
-function deleteFunc (req, res) {
-  console.log(req.params.id);
-  ElectricUpright
-    .findByIdAndRemove(req.params.id)
-    .then(note => {
-      res.send('The note was deleted')
-    })
-    .catch(err => console.log(err));
-};
+app.delete('/api/notes/delete', (req, res) => {
+  const id = req.body.id;
+  const newNotes = notes.filter(note => {
+    return id !== note.id;
+  });
+  notes = newNotes;
+  res.send(notes);
+});
 
-// ADDING MIDDLEWARE
-// app.delete('/ElectricUprights/update/:id', authorizeUserMiddleware, deleteFunc)
-
-// function deleteFunc (req, res) {
-//   console.log(req.params.id);
-//   ElectricUpright
-//     .findByIdAndRemove(req.params.id)
-//     .then(note => {
-//       res.status(201).json(note)
-//     })
-//     .catch(err => console.log(err));
-// };
-
-// app.delete('/ElectricUprights/update/:id', (req, res) => {
-//   console.log(req.params.id)
-//   ElectricUpright.findByIdAndRemove(req.params.id);
-//   const newNotes = d2rdNotes.filter(note => {
-//     return id !== note.id;
-//   });
-//   d2rdNotes = newNotes;
-//   res.send(d2rdNotes);
-// });
-// **** OTHER COLLECTIONS ***
-// app.get('/SpeakerCabinets', (req, res) => {
-//   SpeakerCabinets.find()
-//     .then((data) => {
-//       res.json(data)
-//     })
-//     .catch(err => console.log(err.message))
-// })
-
-// app.get('/misc', (req, res) => {
-//   misc.find()
-//     .then((data) => {
-//       res.json(data)
-//     })
-//     .catch(err => console.log(err.message))
-// })
-
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`server listening on port ${port}`);
 });
