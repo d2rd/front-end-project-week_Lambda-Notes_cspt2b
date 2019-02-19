@@ -8,29 +8,10 @@ import { getNotes } from '../actions';
 import { connect } from 'react-redux';
 
 class App extends Component {
-  state = {
-    renderedResponse: ''
-  }
-  constructor(props) {
-    super(props);
-
-  }
-  getResponse = async() => {
-    const response = await fetch('/ElectricUprights');
-    const body = await response.json();
-    if (response.status !== 200) throw Error(body.message);
-    return body;
-  }
   componentDidMount() {
-    this.getResponse()
-      .then(res => {
-        const someData = res;
-        this.setState({ renderedResponse: someData });
-      })
+    this.props.getNotes();``
   }
   render() {
-    const { renderedResponse } = this.state
-
     return (
       <div className="App">
         <header className="App-header">

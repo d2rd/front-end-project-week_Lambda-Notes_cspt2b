@@ -17,6 +17,7 @@
   "developer": "Glenn-David Daniel <d2rd@outlook.com>",
   "homepage": "",
   "license": "MIT",
+  "proxy":"http://localhost:5500/",
   "dependencies": {
     "body-parser": "^1.17.1",
     "cors": "^2.8.3",

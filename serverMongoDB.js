@@ -35,7 +35,7 @@ mongoose.connect('mongodb://ds141611.mlab.com:41611/d2rd-notes', options)
 // let id = notes.length;
 
 // MIDDLEWARE
-server.use( express.json(), cors()) // bodyParser function for json payloads
+server.use( express.json(), cors(*)) // bodyParser function for json payloads
 server.use(helmet())
  // Allow Cross-origin Resource Sharing i.e. between netlify, heroku and mlab
 // server.use(cors());

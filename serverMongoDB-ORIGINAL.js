@@ -28,7 +28,7 @@ mongoose.connect('mongodb://ds141611.mlab.com:41611/d2rd-notes', options)
 server.use(express.json()) // bodyParser function for json payloads
 
 server.use(helmet())
-server.use(cors()); // ie between netlify, heroku and mlab
+server.use(cors(*)); // ie between netlify, heroku and mlab
 
 // const memCache ={}; 
 
