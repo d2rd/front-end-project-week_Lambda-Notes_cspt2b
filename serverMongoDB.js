@@ -1,13 +1,16 @@
+// ☞ aa187bf9-7c80-4deb-a3ce-6d4ed5e3a37a
 const express = require('express');
+const cors = require('cors');
+const corsOptions = {origin: 'http://localhost:3000'} // Tried replacing url with `*` no difference
 const helmet = require('helmet');
 const mongoose = require('mongoose');
-const cors = require('cors');
-const port = 5500;
 const server = express();
-const ElectricUpright = require('./models/ElectricUpright')
-// const SpeakerCabinets = require('./models/SpeakerCabinets')
-// const Misc = require('./models/Misc')
-// const NoteItem = require('./models/NoteItem')
+
+const port = 5500;
+const ElectricUpright = require('./models/ElectricUpright');
+const SpeakerCabinets = require('./models/SpeakerCabinets');
+const Misc = require('./models/Misc');
+const NoteItem = require('./models/NoteItem');
 
 // connect to database
 const options = {
@@ -25,10 +28,26 @@ mongoose.connect('mongodb://ds141611.mlab.com:41611/d2rd-notes', options)
 // ☞ 8cf866c9-a061-48df-a275-ebdbf2196f60
 // REFACTORED TO MOVE NOTES TO MONGODB
 
-server.use(express.json()) // bodyParser function for json payloads
+// SET NOTES DB
+// setting 'notes' store to connect to mongoDB
+  let notes = mongoose.connect('mongodb://ds141611.mlab.com:41611/d2rd-notes', options);
+  // let notes = d2rdNotes;
+// let id = notes.length;
 
+// MIDDLEWARE
+server.use( express.json(), cors()) // bodyParser function for json payloads
 server.use(helmet())
-server.use(cors()); // ie between netlify, heroku and mlab
+ // Allow Cross-origin Resource Sharing i.e. between netlify, heroku and mlab
+// server.use(cors());
+server.use((req, res, next) =>{
+  res.header("Access-Control-Allow-Origin", "*");  //`*` allows all sites to make requests.  change to specific domains to restrict access.
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH,DELETE, GET')
+    return res.status(200).json({})
+  }
+  next();  // allows other routes to take over.
+})
 
 // const memCache ={}; 
 
@@ -56,7 +75,7 @@ server.post('/ElectricUprights/create', (req, res) => {
     .catch(err => console.log(err))
 });
 // METHOD 1 req.body
-// server.put('/ElectricUprights/update/', (req, res) => {
+// app.put('/ElectricUprights/update/', (req, res) => {
 //   console.log(req.body)
 //   ElectricUpright.findByIdAndUpdate(req.body._id, {price: req.body.price, itemURL: req.body.itemURL})
 //     .then(note => {
@@ -88,7 +107,7 @@ function deleteFunc (req, res) {
 };
 
 // ADDING MIDDLEWARE
-// server.delete('/ElectricUprights/update/:id', authorizeUserMiddleware, deleteFunc)
+// app.delete('/ElectricUprights/update/:id', authorizeUserMiddleware, deleteFunc)
 
 // function deleteFunc (req, res) {
 //   console.log(req.params.id);
@@ -100,7 +119,7 @@ function deleteFunc (req, res) {
 //     .catch(err => console.log(err));
 // };
 
-// server.delete('/ElectricUprights/update/:id', (req, res) => {
+// app.delete('/ElectricUprights/update/:id', (req, res) => {
 //   console.log(req.params.id)
 //   ElectricUpright.findByIdAndRemove(req.params.id);
 //   const newNotes = d2rdNotes.filter(note => {
@@ -110,7 +129,7 @@ function deleteFunc (req, res) {
 //   res.send(d2rdNotes);
 // });
 // **** OTHER COLLECTIONS ***
-// server.get('/SpeakerCabinets', (req, res) => {
+// app.get('/SpeakerCabinets', (req, res) => {
 //   SpeakerCabinets.find()
 //     .then((data) => {
 //       res.json(data)
@@ -118,7 +137,7 @@ function deleteFunc (req, res) {
 //     .catch(err => console.log(err.message))
 // })
 
-// server.get('/misc', (req, res) => {
+// app.get('/misc', (req, res) => {
 //   misc.find()
 //     .then((data) => {
 //       res.json(data)
