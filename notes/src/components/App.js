@@ -19,13 +19,13 @@ class App extends Component {
           <h1 className="App-Title">{`Proximo Notes`}</h1>
           <NoteForm />
         </header>
-        {this.props.error ? <h3>Error Fetching Notes</h3> : null}
         <div className="Flex-Container">
           {this.props.gettingNotes ? (
             <img src={logo} className="App-logo" alt="logo" />
-          ) : (
-            <Notes notes={this.props.notes} />
-          )}
+            ) : (
+              <Notes notes={this.props.notes} />
+              )}
+              {this.props.error ? <h3>Error Fetching Notes</h3> : null}
         </div>
       </div>
     );

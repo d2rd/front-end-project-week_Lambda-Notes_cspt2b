@@ -12,6 +12,22 @@ const SpeakerCabinets = require('./models/SpeakerCabinets');
 const Misc = require('./models/Misc');
 const NoteItem = require('./models/NoteItem');
 
+// MIDDLEWARE
+server.use( express.json(), cors()) // bodyParser function for json payloads
+server.use(helmet())
+ // Allow Cross-origin Resource Sharing i.e. between netlify, heroku and mlab
+// server.use(cors());
+server.use((req, res, next) =>{
+  res.header("Access-Control-Allow-Origin", "*");  //`*` allows all sites to make requests.  change to specific domains to restrict access.
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH,DELETE, GET')
+    return res.status(200).json({})
+  }
+  next();  // allows other routes to take over.
+})
+
+// const memCache ={}; 
 // connect to database
 const options = {
   user:"d2rd",
@@ -34,22 +50,6 @@ mongoose.connect('mongodb://ds141611.mlab.com:41611/d2rd-notes', options)
   // let notes = d2rdNotes;
 // let id = notes.length;
 
-// MIDDLEWARE
-server.use( express.json(), cors()) // bodyParser function for json payloads
-server.use(helmet())
- // Allow Cross-origin Resource Sharing i.e. between netlify, heroku and mlab
-// server.use(cors());
-server.use((req, res, next) =>{
-  res.header("Access-Control-Allow-Origin", "*");  //`*` allows all sites to make requests.  change to specific domains to restrict access.
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH,DELETE, GET')
-    return res.status(200).json({})
-  }
-  next();  // allows other routes to take over.
-})
-
-// const memCache ={}; 
 
 //add CRUD routes
 server.get('/', (req, res) => {
