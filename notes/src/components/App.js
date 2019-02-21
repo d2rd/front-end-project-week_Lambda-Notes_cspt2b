@@ -13,20 +13,29 @@ class App extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = { apiResponse: "" };
+  }
+  // getResponse = async() => {
+    //   const response = await fetch('/ElectricUprights');
+    //   const body = await response.json();
+    //   if (response.status !== 200) throw Error(body.message);
+    //   return body;
+    // }
+    // componentDidMount() {
+    //   this.getResponse()
+    //   .then(res => {
+    //     const someData = res;
+    //     this.setState({ renderedResponse: someData });
+    //   })
+    // }
 
-  }
-  getResponse = async() => {
-    const response = await fetch('/ElectricUprights');
-    const body = await response.json();
-    if (response.status !== 200) throw Error(body.message);
-    return body;
-  }
-  componentDidMount() {
-    this.getResponse()
-      .then(res => {
-        const someData = res;
-        this.setState({ renderedResponse: someData });
-      })
+    callAPI() {
+      fetch("http://localhost:9000/testAPI")
+      .then(res => res.text())
+      .then(res => this.setState({ apiResponse: res })); 
+    }
+  componentWillMount() {
+    this.callAPI();
   }
   render() {
     const { renderedResponse } = this.state
