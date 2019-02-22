@@ -10,3 +10,6 @@ notes/src/components/App.js
 server.js
 
 duplicated index.js to indexLocal.js to save for reverting to local state.
+
+notesReducer.js
+  line 4: initialState changed from `notes` to `ElectricUprights`

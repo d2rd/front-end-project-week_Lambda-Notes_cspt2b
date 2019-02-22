@@ -6,7 +6,7 @@ const User = mongoose.Schema({
   Lname: {type: String, required: true},
   userName: {type: String, required: true},
   password: {type: String, required: true},
-  notes: [{type: ObjectId, ref: 'NoteItem'}]
+  ElectricUprights: [{type: ObjectId, ref: 'NoteItem'}]
 }, {
   collection: 'Admin'
 })
