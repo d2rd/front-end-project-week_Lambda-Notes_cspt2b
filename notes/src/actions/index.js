@@ -13,7 +13,7 @@ export const SINGLE_NOTE = 'SINGLE_NOTE';
 export const TOGGLE_UPDATE_NOTE = 'TOGGLE_UPDATE_NOTE';
 export const UPDATE_TARGET = 'UPDATE_TARGET';
 
-const URL = 'http://localhost:5500/api/notes';
+export const URL = 'http://localhost:5500/api/notes';
 
 // GET
 export const getNotes = () => {

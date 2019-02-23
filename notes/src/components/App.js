@@ -13,9 +13,25 @@ import { getNotes, createNote, deleteNote, toggleShowUpdate,  showSelectedNote }
 
 import { connect } from 'react-redux';
 
+import { URL } from '../actions/index';
 class App extends Component {
+
+constructor(props) {
+  super(props);
+  this.state = { apiResponse: "" };
+}
+
+callAPI() {
+  fetch({ URL })
+  // fetch('http://localhost:5500/notes')
+    .then(res => res.text())
+    .then(res => this.setState({ apiResponse: res }))
+    .catch(err => err);
+}
+
   componentDidMount() {
-    this.props.getNotes();
+    // this.props.getNotes();
+    this.callAPI();
   }
   render() {
     return (
