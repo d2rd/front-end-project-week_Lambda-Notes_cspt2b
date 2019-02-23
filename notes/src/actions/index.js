@@ -120,7 +120,7 @@ export const updateSingleNote = (note, id) => {
 };
 
 // ?? GET single note ??
-export const showSelectedNote = (note) => {
+export const showSelectedNote = (note, id) => {
   return {
     type: SINGLE_NOTE,
     payload: note

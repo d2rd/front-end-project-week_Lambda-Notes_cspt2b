@@ -3,10 +3,13 @@ import './App.css';
 import logo from './D2rdroid2.png';
 import SelectedNote from './SelectedNote';
 import { connect } from 'react-redux';
-import { deleteNote, updateSingleNote, toggleShowUpdate, showSelectedNote } from '../actions';
+import { createNote, deleteNote, updateSingleNote, toggleShowUpdate, showSelectedNote } from '../actions';
 import UpdateNoteForm from './UpdateNoteForm';
 
 class Notes extends Component {
+  handleCreateNote = () => {
+    this.props.createNote()
+  }
   handleDeleteNote = () => {
     const { id } = this.props.noteSelected;
     this.props.deleteNote(id);
@@ -20,6 +23,7 @@ class Notes extends Component {
   toggleShowUpdate = () => {
     this.props.toggleShowUpdate();
   };
+
   render() {
     return (
       <div className="Note-Container">
@@ -30,12 +34,13 @@ class Notes extends Component {
           <div className="Nav-panel">
             <div>
               <button className="btn-NavButton" onClick={() => this.props.getNotes}>View Your Notes</button>
+              {/* <button className="btn-NavButton" onClick={() => { alert("hey david")}}>View Your Notes</button> */}
             </div>
             <div>
               <button className="btn-NavButton">Search Notes</button>
             </div>
             <div>
-              <button className="btn-NavButton">+ Create New Note</button>
+              <button className="btn-NavButton" onClick={() => this.props.createNote}>Create New Note</button>
             </div>
           </div>
           <div className="Notes-panel">
@@ -84,6 +89,7 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
+  createNote,
   deleteNote,
   updateSingleNote,
   toggleShowUpdate,

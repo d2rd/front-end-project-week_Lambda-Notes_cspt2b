@@ -3,7 +3,14 @@ import logo from './D2rdroid2.png';
 import './App.css';
 import Notes from './Notes';
 import NoteForm from './NoteForm';
-import { getNotes } from '../actions';
+// import { getNotes } from '../actions';
+// import { createNote } from '../actions';
+// import { deleteNote } from '../actions';
+// import { toggleShowUpdate } from '../actions';
+// import { updateSingleNote } from '../actions';
+// import { showSelectedNote} from '../actions';
+import { getNotes, createNote, deleteNote, toggleShowUpdate,  showSelectedNote } from '../actions';
+
 import { connect } from 'react-redux';
 
 class App extends Component {
@@ -40,5 +47,5 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { getNotes })(App);
+export default connect(mapStateToProps, { getNotes,  createNote, deleteNote, toggleShowUpdate,  showSelectedNote })(App);
 
